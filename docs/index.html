@@ -1,0 +1,2022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commute Co-Pilot · SU7 Feature Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-deep: #08090c;
+    --bg-stage: #0d0e12;
+    --surface-1: #15171d;
+    --surface-2: #1c1f27;
+    --surface-3: #252934;
+    --line: rgba(255,255,255,0.06);
+    --line-strong: rgba(255,255,255,0.12);
+    --text-1: #f4f5f7;
+    --text-2: #b0b3bd;
+    --text-3: #6c707a;
+    --orange: #ff6900;
+    --orange-soft: #ff883d;
+    --orange-glow: rgba(255, 105, 0, 0.35);
+    --green: #34d27a;
+    --blue: #4a9eff;
+    --warn: #ffb84d;
+  }
+
+  html, body {
+    background: var(--bg-deep);
+    color: var(--text-1);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(1100px 700px at 20% -10%, rgba(255, 105, 0, 0.08), transparent 60%),
+      radial-gradient(800px 600px at 90% 110%, rgba(74, 158, 255, 0.06), transparent 60%),
+      var(--bg-deep);
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 36px 48px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .brand-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--orange), #d65500);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: #fff;
+    box-shadow: 0 4px 20px var(--orange-glow);
+  }
+  .brand-text { line-height: 1.2; }
+  .brand-text .top {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--text-3);
+    text-transform: uppercase;
+  }
+  .brand-text .bottom {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--text-1);
+  }
+
+  .meta {
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--text-3);
+    text-transform: uppercase;
+    line-height: 1.7;
+  }
+  .meta strong { color: var(--text-2); font-weight: 500; }
+
+  /* ===== HERO ===== */
+  .hero {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 56px 48px 32px;
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(40px, 6vw, 76px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    color: var(--text-1);
+    max-width: 980px;
+  }
+  h1 em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--orange);
+  }
+  .hero-sub {
+    margin-top: 28px;
+    max-width: 620px;
+    color: var(--text-2);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* ===== STAGE ===== */
+  .stage {
+    max-width: 1400px;
+    margin: 48px auto 0;
+    padding: 0 48px 48px;
+  }
+
+  .stage-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr 280px;
+    gap: 32px;
+    align-items: start;
+    position: relative;
+  }
+
+  /* Connection lines layer */
+  .stage-canvas {
+    position: relative;
+  }
+
+  /* ===== DEVICE: PHONE ===== */
+  .phone {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 19.5;
+    background: linear-gradient(180deg, #1c1f27, #131519);
+    border-radius: 36px;
+    border: 1px solid var(--line-strong);
+    padding: 8px;
+    box-shadow:
+      0 30px 60px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 28px;
+    background: #000;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .phone-notch {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 88px;
+    height: 24px;
+    background: #000;
+    border-radius: 14px;
+    z-index: 5;
+  }
+  .phone-status {
+    padding: 16px 24px 8px;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-2);
+    z-index: 4;
+  }
+  .phone-time {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 64px;
+    text-align: center;
+    margin-top: 36px;
+    letter-spacing: -0.03em;
+    color: var(--text-1);
+  }
+  .phone-date {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-top: 4px;
+  }
+  .phone-content {
+    flex: 1;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .nudge {
+    background: rgba(28, 31, 39, 0.95);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--line-strong);
+    border-radius: 20px;
+    padding: 16px 14px 14px;
+    opacity: 0;
+    transform: translateY(20px) scale(0.94);
+    transition: opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+                transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .nudge.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .nudge.tapped {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 1px var(--orange), 0 0 30px var(--orange-glow);
+  }
+  .nudge-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .nudge-icon {
+    width: 22px;
+    height: 22px;
+    background: var(--orange);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Fraunces', serif;
+  }
+  .nudge-app {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-2);
+  }
+  .nudge-time {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--text-3);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .nudge-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text-1);
+    line-height: 1.35;
+  }
+  .nudge-body {
+    font-size: 12px;
+    color: var(--text-2);
+    line-height: 1.45;
+    margin-bottom: 14px;
+  }
+  .nudge-actions {
+    display: flex;
+    gap: 6px;
+  }
+  .nudge-btn {
+    flex: 1;
+    padding: 9px 8px;
+    border-radius: 12px;
+    border: none;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--surface-3);
+    color: var(--text-1);
+    transition: all 0.2s;
+  }
+  .nudge-btn.primary {
+    background: var(--orange);
+    color: #fff;
+  }
+  .nudge-btn.primary:hover {
+    background: var(--orange-soft);
+  }
+  .nudge-btn.secondary:hover {
+    background: rgba(255,255,255,0.08);
+  }
+
+  /* Phone "after-tap" confirmation */
+  .phone-confirm {
+    position: absolute;
+    inset: 8px;
+    border-radius: 28px;
+    background: linear-gradient(180deg, #0e1014, #1a1d24);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    z-index: 10;
+  }
+  .phone-confirm.visible { opacity: 1; }
+  .phone-confirm-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(255, 105, 0, 0.12);
+    border: 1.5px solid var(--orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .phone-confirm-icon::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px solid var(--orange);
+    opacity: 0.4;
+    animation: pulse 1.6s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { transform: scale(0.95); opacity: 0.4; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+  .phone-confirm-arrow {
+    width: 28px;
+    height: 28px;
+    fill: var(--orange);
+  }
+  .phone-confirm-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 1.2;
+    color: var(--text-1);
+    margin-bottom: 12px;
+  }
+  .phone-confirm-sub {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.5;
+    max-width: 220px;
+  }
+
+  /* ===== DEVICE: SU7 CENTER SCREEN ===== */
+  .car {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: linear-gradient(180deg, #14171f, #0a0c11);
+    border-radius: 18px;
+    border: 1px solid var(--line-strong);
+    padding: 6px;
+    box-shadow:
+      0 40px 80px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .car-screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 14px;
+    background: #06070a;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  /* Idle state */
+  .car-idle {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-3);
+    transition: opacity 0.5s;
+  }
+  .car-idle.hidden { opacity: 0; pointer-events: none; }
+  .car-idle-glow {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,105,0,0.15) 0%, transparent 60%);
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .car-idle-glow::before {
+    content: '';
+    position: absolute;
+    inset: 30px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,105,0,0.3);
+    animation: idle-pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes idle-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.4; }
+    50% { transform: scale(1.15); opacity: 0.8; }
+  }
+  .car-idle-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .car-idle-mark {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 24px;
+    color: var(--text-2);
+    margin-top: 8px;
+  }
+
+  /* Active state - navigation */
+  .car-nav {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .car-nav.visible { opacity: 1; }
+
+  .car-bar {
+    padding: 14px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-3);
+  }
+  .car-bar .left { display: flex; gap: 16px; align-items: center; }
+  .car-bar .indicator {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+  }
+  .car-bar .right { color: var(--text-2); }
+
+  .car-main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 0;
+  }
+
+  /* Map area - SVG */
+  .car-map {
+    position: relative;
+    background: linear-gradient(180deg, #0a0c11, #060709);
+    overflow: hidden;
+  }
+  .car-map svg {
+    width: 100%;
+    height: 100%;
+  }
+  .map-route {
+    fill: none;
+    stroke: var(--orange);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 6px var(--orange-glow));
+    stroke-dasharray: 800;
+    stroke-dashoffset: 800;
+    transition: stroke-dashoffset 1.4s ease-out 0.3s;
+  }
+  .car-nav.visible .map-route {
+    stroke-dashoffset: 0;
+  }
+  .map-pin {
+    transform-origin: center;
+    transform-box: fill-box;
+    opacity: 0;
+    transition: opacity 0.4s ease 1.4s;
+  }
+  .car-nav.visible .map-pin { opacity: 1; }
+  .map-pin-start circle:first-child { fill: var(--text-2); }
+  .map-pin-end circle:first-child { fill: var(--orange); }
+
+  .car-side {
+    border-left: 1px solid var(--line);
+    padding: 18px 18px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(255,255,255,0.015);
+  }
+  .car-eta-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 6px;
+  }
+  .car-eta-time {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 36px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--text-1);
+    margin-bottom: 4px;
+  }
+  .car-eta-distance {
+    font-size: 11px;
+    color: var(--text-2);
+    margin-bottom: 18px;
+  }
+  .car-step {
+    padding: 12px 0;
+    border-top: 1px solid var(--line);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .car-step-arrow {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: var(--surface-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--orange);
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .car-step-text {
+    flex: 1;
+    line-height: 1.35;
+  }
+  .car-step-main {
+    font-size: 12px;
+    color: var(--text-1);
+    margin-bottom: 2px;
+    font-weight: 500;
+  }
+  .car-step-sub {
+    font-size: 10px;
+    color: var(--text-3);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.06em;
+  }
+
+  /* ===== DEVICE: HOME ===== */
+  .home {
+    width: 100%;
+    aspect-ratio: 9 / 19.5;
+    background: linear-gradient(180deg, #1c1f27, #131519);
+    border-radius: 36px;
+    border: 1px solid var(--line-strong);
+    padding: 8px;
+    box-shadow:
+      0 30px 60px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .home-screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 28px;
+    background: #06070a;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 28px 18px 18px;
+  }
+  .home-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .home-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 20px;
+    color: var(--text-1);
+  }
+  .home-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .home-mode {
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--text-2);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.08em;
+  }
+  .home-mode-tag {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(52, 210, 122, 0.12);
+    color: var(--green);
+    border: 1px solid rgba(52, 210, 122, 0.25);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-left: 4px;
+    transition: all 0.5s ease;
+  }
+  .home-mode-tag.away {
+    background: rgba(255, 105, 0, 0.12);
+    color: var(--orange);
+    border-color: rgba(255, 105, 0, 0.4);
+  }
+
+  .home-tiles {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    flex: 1;
+  }
+  .tile {
+    background: var(--surface-1);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 12px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .tile.away {
+    background: linear-gradient(160deg, rgba(255, 105, 0, 0.08), var(--surface-1));
+    border-color: rgba(255, 105, 0, 0.3);
+  }
+  .tile.triggered::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 30%, var(--orange-glow), transparent 60%);
+    opacity: 0;
+    animation: trigger-flash 1s ease-out;
+    pointer-events: none;
+  }
+  @keyframes trigger-flash {
+    0% { opacity: 0.7; }
+    100% { opacity: 0; }
+  }
+
+  .tile-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    background: var(--surface-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-2);
+    font-size: 11px;
+    transition: all 0.5s;
+  }
+  .tile.away .tile-icon {
+    background: var(--orange);
+    color: #fff;
+  }
+  .tile-name {
+    font-size: 10px;
+    color: var(--text-2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .tile-state {
+    font-size: 12px;
+    color: var(--text-1);
+    font-weight: 500;
+  }
+  .tile.away .tile-state {
+    color: var(--orange-soft);
+  }
+
+  /* ===== HANDOFF FX ===== */
+  .handoff-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .handoff-line {
+    fill: none;
+    stroke: var(--orange);
+    stroke-width: 1.5;
+    stroke-dasharray: 4 4;
+    opacity: 0;
+    filter: drop-shadow(0 0 6px var(--orange-glow));
+  }
+  .handoff-line.active {
+    animation: handoff-flow 1.2s ease-out forwards;
+  }
+  @keyframes handoff-flow {
+    0% { opacity: 0; stroke-dashoffset: 0; }
+    20% { opacity: 1; }
+    100% { opacity: 0; stroke-dashoffset: -40; }
+  }
+
+  /* ===== TIMELINE / CONTROLS ===== */
+  .controls {
+    max-width: 1400px;
+    margin: 32px auto 0;
+    padding: 28px 48px 64px;
+  }
+  .timeline {
+    background: var(--surface-1);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 22px 26px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 24px;
+    align-items: center;
+  }
+  .play-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--orange);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 0 0 0 var(--orange-glow);
+  }
+  .play-btn:hover {
+    background: var(--orange-soft);
+    box-shadow: 0 0 0 8px var(--orange-glow);
+  }
+  .play-btn svg { width: 18px; height: 18px; fill: #fff; }
+
+  .beat-track {
+    position: relative;
+    padding: 8px 0;
+  }
+  .beat-track-line {
+    height: 2px;
+    background: var(--surface-3);
+    border-radius: 2px;
+    position: relative;
+  }
+  .beat-track-progress {
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    background: var(--orange);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .beats {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+  .beat-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--surface-3);
+    border: 2px solid var(--bg-stage);
+    margin-top: -5px;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .beat-dot.passed { background: var(--orange); }
+  .beat-dot.active {
+    background: var(--orange);
+    box-shadow: 0 0 0 4px var(--orange-glow);
+    transform: scale(1.2);
+  }
+
+  .beat-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .beat-label { width: 60px; text-align: center; transition: color 0.3s; }
+  .beat-label.active { color: var(--orange); }
+  .beat-label:first-child { text-align: left; width: 70px; }
+  .beat-label:last-child { text-align: right; width: 70px; }
+
+  .beat-info {
+    min-width: 240px;
+    text-align: right;
+  }
+  .beat-info-time {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 28px;
+    color: var(--text-1);
+    line-height: 1;
+  }
+  .beat-info-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-top: 6px;
+  }
+
+  /* ===== NARRATION ===== */
+  .narration {
+    margin-top: 28px;
+    padding: 22px 26px;
+    background: var(--surface-1);
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--orange);
+    border-radius: 4px 16px 16px 4px;
+    min-height: 80px;
+    transition: all 0.4s ease;
+  }
+  .narration-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 10px;
+  }
+  .narration-text {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--text-1);
+    letter-spacing: -0.005em;
+  }
+  .narration-text strong {
+    font-weight: 500;
+    color: var(--text-1);
+  }
+
+  /* ===== FOOTER LINKS ===== */
+  footer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 48px 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-3);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-top: 1px solid var(--line);
+    margin-top: 32px;
+    padding-top: 24px;
+  }
+  footer a {
+    color: var(--text-2);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  footer a:hover { color: var(--orange); }
+
+  /* ===== TRY IT SECTION ===== */
+  .tryit {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 88px 48px 32px;
+    border-top: 1px solid var(--line);
+    margin-top: 24px;
+  }
+  .tryit-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 48px;
+    align-items: end;
+    margin-bottom: 56px;
+  }
+  .tryit-head h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(32px, 4.5vw, 54px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    max-width: 760px;
+  }
+  .tryit-head h2 em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--orange);
+  }
+  .tryit-head .step {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    text-align: right;
+    line-height: 1.7;
+  }
+  .tryit-head .step strong {
+    color: var(--orange);
+    font-weight: 500;
+  }
+
+  .tryit-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .tryit-form {
+    background: var(--surface-1);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 28px 28px 24px;
+  }
+  .form-row {
+    margin-bottom: 22px;
+  }
+  .form-row:last-of-type { margin-bottom: 28px; }
+  .form-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .form-label .num {
+    color: var(--orange);
+    font-weight: 500;
+  }
+  .form-input, .form-textarea {
+    width: 100%;
+    background: var(--bg-deep);
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: var(--text-1);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    transition: border-color 0.2s, background 0.2s;
+    resize: none;
+  }
+  .form-input:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--orange);
+    background: rgba(255, 105, 0, 0.04);
+  }
+  .form-input::placeholder, .form-textarea::placeholder {
+    color: var(--text-3);
+  }
+  .form-textarea {
+    min-height: 76px;
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.4;
+  }
+  .form-row-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .form-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .chip {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--text-2);
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .chip:hover {
+    border-color: var(--orange);
+    color: var(--text-1);
+    background: rgba(255, 105, 0, 0.06);
+  }
+
+  .form-options {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    margin-bottom: 22px;
+  }
+  .form-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 12px;
+    color: var(--text-2);
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .form-toggle input { display: none; }
+  .form-toggle-track {
+    width: 30px;
+    height: 18px;
+    background: var(--surface-3);
+    border-radius: 9px;
+    position: relative;
+    transition: background 0.2s;
+  }
+  .form-toggle-track::after {
+    content: '';
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 14px; height: 14px;
+    background: var(--text-2);
+    border-radius: 50%;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .form-toggle input:checked ~ .form-toggle-track {
+    background: var(--orange);
+  }
+  .form-toggle input:checked ~ .form-toggle-track::after {
+    transform: translateX(12px);
+    background: #fff;
+  }
+
+  .form-submit {
+    width: 100%;
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: all 0.2s;
+    box-shadow: 0 0 0 0 var(--orange-glow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .form-submit:hover {
+    background: var(--orange-soft);
+    box-shadow: 0 0 0 6px var(--orange-glow);
+  }
+  .form-submit:active { transform: scale(0.99); }
+  .form-submit svg { width: 14px; height: 14px; fill: currentColor; }
+
+  /* Output panel */
+  .tryit-output {
+    position: sticky;
+    top: 32px;
+  }
+  .tryit-phone {
+    width: 100%;
+    aspect-ratio: 9 / 19.5;
+    background: linear-gradient(180deg, #1c1f27, #131519);
+    border-radius: 36px;
+    border: 1px solid var(--line-strong);
+    padding: 8px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+    margin-bottom: 18px;
+  }
+  .tryit-phone-screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 28px;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+  .tryit-phone-notch {
+    position: absolute;
+    top: 12px; left: 50%;
+    transform: translateX(-50%);
+    width: 88px; height: 24px;
+    background: #000;
+    border-radius: 14px;
+    z-index: 5;
+  }
+  .tryit-phone-status {
+    padding: 16px 24px 8px;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-2);
+    z-index: 4;
+  }
+  .tryit-phone-content {
+    flex: 1;
+    padding: 0 16px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .tryit-empty {
+    text-align: center;
+    color: var(--text-3);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 0 12px;
+    line-height: 1.8;
+  }
+  .tryit-empty-mark {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--text-2);
+    margin-bottom: 12px;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .tryit-error {
+    color: var(--warn);
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 0 8px;
+    font-family: 'Inter', sans-serif;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .tryit-error-mark {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--warn);
+    margin-bottom: 12px;
+  }
+
+  /* Disclosure */
+  .tryit-disclosure {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--text-3);
+    line-height: 1.7;
+    text-align: center;
+    padding: 0 8px;
+  }
+  .tryit-disclosure strong {
+    color: var(--text-2);
+    font-weight: 500;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1100px) {
+    .stage-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .car { aspect-ratio: 16 / 10; }
+    .phone, .home { max-width: 320px; margin: 0 auto; }
+    .tryit-grid {
+      grid-template-columns: 1fr;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .tryit-output { position: static; }
+    .tryit-head { grid-template-columns: 1fr; gap: 16px; }
+    .tryit-head .step { text-align: left; }
+  }
+  @media (max-width: 720px) {
+    header, .hero, .stage, .controls, .tryit, footer {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    h1 { font-size: 36px; }
+    .timeline { grid-template-columns: 1fr; gap: 18px; }
+    .beat-info { text-align: left; }
+    .beat-labels { font-size: 8px; }
+    .form-row-split { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-mark">小</div>
+    <div class="brand-text">
+      <div class="top">Xiaomi · MGMT 275</div>
+      <div class="bottom">Commute Co-Pilot</div>
+    </div>
+  </div>
+  <div class="meta">
+    <div><strong>Feature Demo</strong></div>
+    <div>Final Project · UCLA Anderson</div>
+    <div>Henry Tran · 2026</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">SU7 × HyperOS · Feature Walkthrough</div>
+  <h1>Your car already knew you were running late.<br><em>Now it does something about it.</em></h1>
+  <p class="hero-sub">
+    Commute Co-Pilot reads your calendar, watches the traffic, and tells you exactly when to leave — then hands the route to your SU7 and locks up your house behind you. This is a live walkthrough of the morning departure flow.
+  </p>
+</section>
+
+<section class="stage">
+  <div class="stage-grid">
+    <!-- PHONE -->
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="phone-notch"></div>
+        <div class="phone-status">
+          <span id="phoneTime">7:45</span>
+          <span>HyperOS</span>
+        </div>
+        <div class="phone-time" id="phoneClockBig">7:45</div>
+        <div class="phone-date">Tuesday · May 12</div>
+        <div class="phone-content">
+          <div class="nudge" id="nudge">
+            <div class="nudge-head">
+              <div class="nudge-icon">小</div>
+              <div class="nudge-app">Commute Co-Pilot</div>
+              <div class="nudge-time">now</div>
+            </div>
+            <div class="nudge-title">Leave by 8:15 for your 9am standup.</div>
+            <div class="nudge-body">Traffic on the 405 is heavier than usual. 38 min drive to Building 4.</div>
+            <div class="nudge-actions">
+              <button class="nudge-btn primary" id="nudgeAccept">Start navigation</button>
+              <button class="nudge-btn secondary">Not today</button>
+            </div>
+          </div>
+        </div>
+        <div class="phone-confirm" id="phoneConfirm">
+          <div class="phone-confirm-icon">
+            <svg class="phone-confirm-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="phone-confirm-title">Sent to your SU7.</div>
+          <div class="phone-confirm-sub">Departure routine triggered. Drive safe.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAR + handoff overlay -->
+    <div class="stage-canvas">
+      <div class="car">
+        <div class="car-screen">
+          <div class="car-idle" id="carIdle">
+            <div class="car-idle-glow"></div>
+            <div class="car-idle-text">SU7 · Awaiting Handoff</div>
+            <div class="car-idle-mark">小米</div>
+          </div>
+          <div class="car-nav" id="carNav">
+            <div class="car-bar">
+              <div class="left">
+                <div class="indicator"></div>
+                <span>Navigation Active</span>
+                <span>· Calendar Linked</span>
+              </div>
+              <div class="right">9:00 AM · Team Standup</div>
+            </div>
+            <div class="car-main">
+              <div class="car-map">
+                <svg viewBox="0 0 600 360" preserveAspectRatio="xMidYMid slice">
+                  <defs>
+                    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+                      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,0.025)" stroke-width="1"/>
+                    </pattern>
+                    <radialGradient id="mapGlow" cx="80%" cy="20%">
+                      <stop offset="0%" stop-color="rgba(255,105,0,0.08)"/>
+                      <stop offset="100%" stop-color="transparent"/>
+                    </radialGradient>
+                  </defs>
+                  <rect width="600" height="360" fill="url(#grid)"/>
+                  <rect width="600" height="360" fill="url(#mapGlow)"/>
+                  <!-- Streets -->
+                  <path d="M 0 250 Q 200 240 400 220 T 600 200" stroke="rgba(255,255,255,0.08)" stroke-width="20" fill="none"/>
+                  <path d="M 150 0 Q 160 100 200 200 T 240 360" stroke="rgba(255,255,255,0.06)" stroke-width="14" fill="none"/>
+                  <path d="M 380 0 L 400 360" stroke="rgba(255,255,255,0.05)" stroke-width="10" fill="none"/>
+                  <!-- Route -->
+                  <path class="map-route" d="M 80 280 Q 180 270 200 200 Q 230 130 380 110 Q 480 100 540 80"/>
+                  <!-- Pins -->
+                  <g class="map-pin map-pin-start" transform="translate(80, 280)">
+                    <circle r="8" fill="#b0b3bd"/>
+                    <circle r="3" fill="#06070a"/>
+                  </g>
+                  <g class="map-pin map-pin-end" transform="translate(540, 80)">
+                    <circle r="9" fill="#ff6900"/>
+                    <circle r="3.5" fill="#fff"/>
+                    <circle r="14" fill="none" stroke="#ff6900" stroke-width="1.5" opacity="0.5"/>
+                  </g>
+                </svg>
+              </div>
+              <div class="car-side">
+                <div class="car-eta-label">Arrive</div>
+                <div class="car-eta-time">8:53 AM</div>
+                <div class="car-eta-distance">38 min · 22.4 km · via 405 N</div>
+                <div class="car-step">
+                  <div class="car-step-arrow">↑</div>
+                  <div class="car-step-text">
+                    <div class="car-step-main">Continue on Olympic Blvd</div>
+                    <div class="car-step-sub">2.1 km</div>
+                  </div>
+                </div>
+                <div class="car-step">
+                  <div class="car-step-arrow">↗</div>
+                  <div class="car-step-text">
+                    <div class="car-step-main">Merge onto I-405 N</div>
+                    <div class="car-step-sub">14.8 km · heavier than usual</div>
+                  </div>
+                </div>
+                <div class="car-step">
+                  <div class="car-step-arrow">→</div>
+                  <div class="car-step-text">
+                    <div class="car-step-main">Exit Wilshire Blvd</div>
+                    <div class="car-step-sub">5.5 km to destination</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Handoff lines drawn over the whole stage -->
+      <svg class="handoff-canvas" id="handoffCanvas" preserveAspectRatio="none"></svg>
+    </div>
+
+    <!-- HOME -->
+    <div class="home">
+      <div class="home-screen">
+        <div class="home-header">
+          <div class="home-title">Mi Home</div>
+          <div class="home-status">12 devices · live</div>
+        </div>
+        <div class="home-mode">
+          Mode <span class="home-mode-tag" id="homeMode">Home</span>
+        </div>
+        <div class="home-tiles" id="homeTiles">
+          <div class="tile" data-name="Front Door">
+            <div class="tile-icon">⌂</div>
+            <div class="tile-name">Front Door</div>
+            <div class="tile-state" data-on="Unlocked" data-off="Locked">Unlocked</div>
+          </div>
+          <div class="tile" data-name="Living Lights">
+            <div class="tile-icon">✦</div>
+            <div class="tile-name">Living Rm</div>
+            <div class="tile-state" data-on="On · 80%" data-off="Off">On · 80%</div>
+          </div>
+          <div class="tile" data-name="AC">
+            <div class="tile-icon">≋</div>
+            <div class="tile-name">AC</div>
+            <div class="tile-state" data-on="22°C" data-off="Eco · 28°C">22°C</div>
+          </div>
+          <div class="tile" data-name="Robot Vacuum">
+            <div class="tile-icon">○</div>
+            <div class="tile-name">Vacuum</div>
+            <div class="tile-state" data-on="Idle" data-off="Cleaning">Idle</div>
+          </div>
+          <div class="tile" data-name="Cameras">
+            <div class="tile-icon">▢</div>
+            <div class="tile-name">Cameras</div>
+            <div class="tile-state" data-on="Off" data-off="Armed">Off</div>
+          </div>
+          <div class="tile" data-name="Stove">
+            <div class="tile-icon">▥</div>
+            <div class="tile-name">Stove Gas</div>
+            <div class="tile-state" data-on="Open" data-off="Shut · Safe">Open</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="controls">
+  <div class="timeline">
+    <button class="play-btn" id="playBtn" aria-label="Play journey">
+      <svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <div class="beat-track">
+      <div class="beat-track-line">
+        <div class="beat-track-progress" id="beatProgress"></div>
+        <div class="beats" id="beatDots"></div>
+      </div>
+      <div class="beat-labels" id="beatLabels"></div>
+    </div>
+    <div class="beat-info">
+      <div class="beat-info-time" id="beatTime">7:45 AM</div>
+      <div class="beat-info-label" id="beatLabel">Calendar Sync</div>
+    </div>
+  </div>
+
+  <div class="narration" id="narration">
+    <div class="narration-eyebrow">Beat 1 · Context Assembly</div>
+    <div class="narration-text">
+      The system reads <strong>tomorrow's calendar overnight</strong>, then quietly checks live traffic at 7:45 AM. No notification yet — just the prediction model running in the background, deciding whether you'll need a nudge and when.
+    </div>
+  </div>
+</section>
+
+<section class="tryit">
+  <div class="tryit-head">
+    <h2>That was the script. <em>Now you write the calendar.</em></h2>
+    <div class="step">
+      Step 02<br>
+      <strong>Try it yourself</strong>
+    </div>
+  </div>
+
+  <div class="tryit-grid">
+    <div class="tryit-form">
+      <div class="form-row">
+        <div class="form-label"><span>What's on your calendar</span><span class="num">01</span></div>
+        <textarea class="form-textarea" id="eventInput" placeholder="9am Team Standup at Building 4"></textarea>
+        <div class="form-suggestions" id="suggestions">
+          <div class="chip" data-event="9am Team Standup at Building 4" data-dest="Building 4">9am Standup</div>
+          <div class="chip" data-event="1:30pm Lunch with Sarah in Beverly Hills" data-dest="Beverly Hills">Lunch in Beverly Hills</div>
+          <div class="chip" data-event="3pm Investor pitch at Sand Hill Road" data-dest="Sand Hill Road">Investor pitch</div>
+          <div class="chip" data-event="6:45pm Dinner reservation in Santa Monica" data-dest="Santa Monica">Dinner in Santa Monica</div>
+        </div>
+      </div>
+
+      <div class="form-row-split">
+        <div class="form-row" style="margin-bottom:0;">
+          <div class="form-label"><span>Destination</span><span class="num">02</span></div>
+          <input class="form-input" id="destInput" placeholder="Building 4" value="">
+        </div>
+        <div class="form-row" style="margin-bottom:0;">
+          <div class="form-label"><span>Current time</span><span class="num">03</span></div>
+          <input class="form-input" id="currentInput" placeholder="now" value="now">
+        </div>
+      </div>
+
+      <div class="form-options" style="margin-top: 22px;">
+        <label class="form-toggle">
+          <input type="checkbox" id="trafficToggle" checked>
+          <div class="form-toggle-track"></div>
+          <span>Heavy traffic</span>
+        </label>
+        <label class="form-toggle">
+          <input type="checkbox" id="smartHomeToggle" checked>
+          <div class="form-toggle-track"></div>
+          <span>Smart home on</span>
+        </label>
+      </div>
+
+      <button class="form-submit" id="generateBtn">
+        Generate the nudge
+        <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <div class="tryit-output">
+      <div class="tryit-phone">
+        <div class="tryit-phone-screen">
+          <div class="tryit-phone-notch"></div>
+          <div class="tryit-phone-status">
+            <span id="tryClock">—</span>
+            <span>HyperOS</span>
+          </div>
+          <div class="tryit-phone-content" id="tryContent">
+            <div class="tryit-empty">
+              <div class="tryit-empty-mark">小米</div>
+              Type a calendar event<br>and tap generate<br>to see the nudge
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tryit-disclosure">
+        Generated with rule-based logic for the demo.<br>
+        The real product uses a <strong>fine-tuned small LLM</strong><br>described in the PR/FAQ (Internal FAQ #6).
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>Source: PR/FAQ · MGMT 275 Assignment 5</div>
+  <div>
+    <a href="https://github.com/henrytran2026" target="_blank">github.com/henrytran2026</a>
+  </div>
+</footer>
+
+<script>
+  // === Beat data ===
+  const beats = [
+    {
+      time: '7:45 AM',
+      label: 'Context',
+      narrationEyebrow: 'Beat 1 · Context Assembly',
+      narration: "The system reads <strong>tomorrow's calendar overnight</strong>, then quietly checks live traffic at 7:45 AM. No notification yet — just the prediction model running in the background, deciding whether you'll need a nudge and when.",
+      phoneClock: '7:45',
+    },
+    {
+      time: '8:02 AM',
+      label: 'Nudge',
+      narrationEyebrow: 'Beat 2 · The Nudge',
+      narration: "A short, natural message arrives on your phone and watch: <strong>\"Leave by 8:15 for your 9am standup. Traffic on the 405 is heavier than usual.\"</strong> The departure time is computed by a fast tree model. The phrasing comes from a fine-tuned small LLM.",
+      phoneClock: '8:02',
+    },
+    {
+      time: '8:14 AM',
+      label: 'Tap',
+      narrationEyebrow: 'Beat 3 · The Decision',
+      narration: "One tap. <strong>\"Start navigation.\"</strong> This is the moment the ecosystem activates — the route is sent to the SU7, and a departure routine fires across every connected device in the home.",
+      phoneClock: '8:14',
+    },
+    {
+      time: '8:14 AM',
+      label: 'Handoff',
+      narrationEyebrow: 'Beat 4 · The Handoff',
+      narration: "The route lands on the <strong>SU7's center screen</strong> with calendar context attached. The car already knows where you're going and why. No re-typing the address.",
+      phoneClock: '8:15',
+    },
+    {
+      time: '8:15 AM',
+      label: 'Home',
+      narrationEyebrow: 'Beat 5 · Home Goes Away',
+      narration: "Behind you, the house quietly takes care of itself. <strong>Door locks. Lights off. AC eco. Cameras armed. Stove confirmed shut.</strong> Six devices. One trigger. Zero taps.",
+      phoneClock: '8:15',
+    },
+    {
+      time: '8:16 AM',
+      label: 'Ready',
+      narrationEyebrow: 'Beat 6 · You\'re On Your Way',
+      narration: "You get in the car. Cabin pre-conditioned. Route loaded. House handled. <strong>The whole morning collapses into one tap.</strong> That's Human × Car × Home stopping being a tagline and starting to be a daily habit.",
+      phoneClock: '8:16',
+    },
+  ];
+
+  // === Build timeline DOM ===
+  const beatDots = document.getElementById('beatDots');
+  const beatLabels = document.getElementById('beatLabels');
+  beats.forEach((b, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'beat-dot';
+    dot.dataset.idx = i;
+    dot.addEventListener('click', () => goToBeat(i));
+    beatDots.appendChild(dot);
+
+    const label = document.createElement('div');
+    label.className = 'beat-label';
+    label.textContent = b.label;
+    beatLabels.appendChild(label);
+  });
+
+  // === State ===
+  let currentBeat = 0;
+  let playing = false;
+  let timer = null;
+
+  const els = {
+    phoneClockBig: document.getElementById('phoneClockBig'),
+    phoneTime: document.getElementById('phoneTime'),
+    nudge: document.getElementById('nudge'),
+    nudgeAccept: document.getElementById('nudgeAccept'),
+    phoneConfirm: document.getElementById('phoneConfirm'),
+    carIdle: document.getElementById('carIdle'),
+    carNav: document.getElementById('carNav'),
+    homeMode: document.getElementById('homeMode'),
+    tiles: document.querySelectorAll('#homeTiles .tile'),
+    beatProgress: document.getElementById('beatProgress'),
+    beatTime: document.getElementById('beatTime'),
+    beatLabel: document.getElementById('beatLabel'),
+    narration: document.getElementById('narration'),
+    playBtn: document.getElementById('playBtn'),
+    playIcon: document.getElementById('playIcon'),
+  };
+
+  function applyBeat(idx) {
+    const beat = beats[idx];
+
+    // Timeline visuals
+    els.beatProgress.style.width = `${(idx / (beats.length - 1)) * 100}%`;
+    els.beatTime.textContent = beat.time;
+    els.beatLabel.textContent = beat.label;
+
+    document.querySelectorAll('.beat-dot').forEach((d, i) => {
+      d.classList.toggle('passed', i < idx);
+      d.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.beat-label').forEach((l, i) => {
+      l.classList.toggle('active', i === idx);
+    });
+
+    // Narration with subtle fade
+    els.narration.style.opacity = '0';
+    setTimeout(() => {
+      els.narration.innerHTML = `
+        <div class="narration-eyebrow">${beat.narrationEyebrow}</div>
+        <div class="narration-text">${beat.narration}</div>
+      `;
+      els.narration.style.opacity = '1';
+    }, 180);
+
+    // Phone clock
+    els.phoneClockBig.textContent = beat.phoneClock;
+    els.phoneTime.textContent = beat.phoneClock;
+
+    // Beat-specific device states
+    // Reset everything first based on idx
+    els.nudge.classList.remove('visible', 'tapped');
+    els.phoneConfirm.classList.remove('visible');
+    els.carIdle.classList.remove('hidden');
+    els.carNav.classList.remove('visible');
+    els.homeMode.classList.remove('away');
+    els.homeMode.textContent = 'Home';
+    els.tiles.forEach(t => {
+      t.classList.remove('away', 'triggered');
+      const state = t.querySelector('.tile-state');
+      state.textContent = state.dataset.on;
+    });
+
+    if (idx >= 1) {
+      els.nudge.classList.add('visible');
+    }
+    if (idx >= 2) {
+      els.nudge.classList.add('tapped');
+    }
+    if (idx >= 3) {
+      els.phoneConfirm.classList.add('visible');
+      els.carIdle.classList.add('hidden');
+      els.carNav.classList.add('visible');
+    }
+    if (idx >= 4) {
+      els.homeMode.classList.add('away');
+      els.homeMode.textContent = 'Away';
+      els.tiles.forEach((t, i) => {
+        setTimeout(() => {
+          t.classList.add('away', 'triggered');
+          const state = t.querySelector('.tile-state');
+          state.textContent = state.dataset.off;
+        }, i * 90);
+      });
+    }
+  }
+
+  function goToBeat(idx) {
+    currentBeat = Math.max(0, Math.min(beats.length - 1, idx));
+    applyBeat(currentBeat);
+  }
+
+  function nextBeat() {
+    if (currentBeat < beats.length - 1) {
+      currentBeat++;
+      applyBeat(currentBeat);
+    } else {
+      pause();
+    }
+  }
+
+  function play() {
+    if (currentBeat >= beats.length - 1) {
+      currentBeat = 0;
+      applyBeat(0);
+    }
+    playing = true;
+    els.playIcon.innerHTML = '<rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/>';
+    timer = setInterval(nextBeat, 2400);
+  }
+
+  function pause() {
+    playing = false;
+    els.playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+    clearInterval(timer);
+  }
+
+  els.playBtn.addEventListener('click', () => {
+    if (playing) pause(); else play();
+  });
+
+  // Allow tap on the in-app nudge button to advance to beat 2
+  els.nudgeAccept.addEventListener('click', () => {
+    if (currentBeat < 2) {
+      pause();
+      goToBeat(2);
+      setTimeout(() => goToBeat(3), 700);
+      setTimeout(() => goToBeat(4), 1700);
+      setTimeout(() => goToBeat(5), 3000);
+    }
+  });
+
+  // Init
+  applyBeat(0);
+
+  // ============================================================
+  // === TRY IT YOURSELF: nudge generator ===
+  // ============================================================
+
+  const tryEls = {
+    eventInput: document.getElementById('eventInput'),
+    destInput: document.getElementById('destInput'),
+    currentInput: document.getElementById('currentInput'),
+    trafficToggle: document.getElementById('trafficToggle'),
+    smartHomeToggle: document.getElementById('smartHomeToggle'),
+    generateBtn: document.getElementById('generateBtn'),
+    tryContent: document.getElementById('tryContent'),
+    tryClock: document.getElementById('tryClock'),
+    suggestions: document.getElementById('suggestions'),
+  };
+
+  // Suggestion chips fill the form
+  tryEls.suggestions.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      tryEls.eventInput.value = chip.dataset.event;
+      tryEls.destInput.value = chip.dataset.dest;
+      tryEls.eventInput.focus();
+    });
+  });
+
+  // Default destination follows event input if user hasn't typed one
+  let destManuallyEdited = false;
+  tryEls.destInput.addEventListener('input', () => { destManuallyEdited = true; });
+
+  // ---- Time parsing ----
+  // Accepts "9am", "9:00 AM", "13:00", "1:30pm", "noon", "midnight"
+  function parseEventTime(str) {
+    if (!str) return null;
+    const s = str.toLowerCase().trim();
+    if (s.includes('noon')) return { h: 12, m: 0 };
+    if (s.includes('midnight')) return { h: 0, m: 0 };
+
+    // Match "9", "9am", "9:00", "9:30am", "13:00", "1:30 pm" etc.
+    const m = s.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/i);
+    if (!m) return null;
+    let h = parseInt(m[1], 10);
+    const min = m[2] ? parseInt(m[2], 10) : 0;
+    const meridian = m[3];
+
+    if (h > 23 || min > 59) return null;
+
+    if (meridian === 'pm' && h < 12) h += 12;
+    if (meridian === 'am' && h === 12) h = 0;
+    // No meridian, h <= 12: assume morning if 7-11, else accept as 24h
+    return { h, m: min };
+  }
+
+  function formatTime(h, m) {
+    const period = h >= 12 ? 'PM' : 'AM';
+    let displayH = h % 12;
+    if (displayH === 0) displayH = 12;
+    return `${displayH}:${String(m).padStart(2, '0')} ${period}`;
+  }
+
+  function formatTimeShort(h, m) {
+    const period = h >= 12 ? 'PM' : 'AM';
+    let displayH = h % 12;
+    if (displayH === 0) displayH = 12;
+    if (m === 0) return `${displayH}${period.toLowerCase()}`;
+    return `${displayH}:${String(m).padStart(2, '0')} ${period}`;
+  }
+
+  function getCurrentTime(input) {
+    if (!input || input.toLowerCase().trim() === 'now') {
+      const d = new Date();
+      return { h: d.getHours(), m: d.getMinutes() };
+    }
+    return parseEventTime(input);
+  }
+
+  function subtractMinutes(time, mins) {
+    let total = time.h * 60 + time.m - mins;
+    while (total < 0) total += 24 * 60;
+    return { h: Math.floor(total / 60), m: total % 60 };
+  }
+
+  function diffMinutes(later, earlier) {
+    return (later.h * 60 + later.m) - (earlier.h * 60 + earlier.m);
+  }
+
+  // ---- Drive time estimation ----
+  function estimateDrive(destination, heavyTraffic) {
+    // Hash destination into a base drive time so same destination gives same baseline
+    let hash = 0;
+    for (let i = 0; i < destination.length; i++) {
+      hash = ((hash << 5) - hash) + destination.charCodeAt(i);
+      hash |= 0;
+    }
+    const base = 18 + (Math.abs(hash) % 22); // 18-40 min baseline
+    const trafficMult = heavyTraffic ? 1.35 : 1.0;
+    return Math.round(base * trafficMult);
+  }
+
+  // ---- Nudge phrasing ----
+  function pickRandom(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  const trafficPhrases = {
+    heavy: [
+      "Traffic on the 405 is heavier than usual",
+      "Heavy traffic ahead — adding 12 min to your usual",
+      "Big slowdown on I-10 right now",
+      "Traffic is worse than your typical Tuesday",
+      "Heavier than usual on your route",
+    ],
+    light: [
+      "Traffic is light right now",
+      "Roads are clear — quicker than your usual",
+      "Smooth drive predicted",
+      "Lighter traffic than your morning average",
+    ],
+  };
+
+  function buildNudge(eventText, destination, eventTime, currentTime, driveMin, heavyTraffic) {
+    const buffer = heavyTraffic ? 6 : 4; // get-ready buffer
+    const departureTime = subtractMinutes(eventTime, driveMin + buffer);
+    const minutesUntilDeparture = diffMinutes(departureTime, currentTime);
+
+    // Title: "Leave by [time] for your [eventLabel]"
+    const eventLabel = extractEventLabel(eventText);
+    const departureStr = formatTimeShort(departureTime.h, departureTime.m);
+
+    const titleVariants = [
+      `Leave by ${departureStr} for your ${eventLabel}.`,
+      `Time to head out — ${departureStr} for ${eventLabel}.`,
+      `${departureStr} departure for ${eventLabel}.`,
+    ];
+    const title = pickRandom(titleVariants);
+
+    const trafficPhrase = pickRandom(heavyTraffic ? trafficPhrases.heavy : trafficPhrases.light);
+    const body = `${trafficPhrase}. ${driveMin} min drive to ${destination}.`;
+
+    return {
+      title,
+      body,
+      currentTimeStr: formatTimeShort(currentTime.h, currentTime.m),
+      departureTimeStr: departureStr,
+      minutesUntilDeparture,
+    };
+  }
+
+  function extractEventLabel(eventText) {
+    // Strip leading time to leave just the event name
+    let label = eventText
+      .replace(/^\s*(noon|midnight)\s*/i, '')
+      .replace(/^\s*\d{1,2}(:\d{2})?\s*(am|pm)?\s*/i, '')
+      .replace(/\s+at\s+.+$/i, '')
+      .replace(/\s+in\s+.+$/i, '')
+      .trim();
+    if (!label) label = eventText.trim();
+    // Lowercase first letter for natural reading after "for your"
+    if (label.length > 0) {
+      label = label[0].toLowerCase() + label.slice(1);
+    }
+    return label;
+  }
+
+  function renderError(msg) {
+    tryEls.tryClock.textContent = '—';
+    tryEls.tryContent.innerHTML = `
+      <div class="tryit-error">
+        <div class="tryit-error-mark">⚠</div>
+        ${msg}
+      </div>
+    `;
+  }
+
+  function renderNudge(nudge, eventTime, smartHome) {
+    tryEls.tryClock.textContent = nudge.currentTimeStr.replace(/\s*(am|pm)/i, '').trim();
+
+    // Format "now" indicator
+    let nowLabel;
+    if (nudge.minutesUntilDeparture <= 0) {
+      nowLabel = 'now · leave now';
+    } else if (nudge.minutesUntilDeparture < 60) {
+      nowLabel = `now · ${nudge.minutesUntilDeparture} min before`;
+    } else {
+      nowLabel = 'now';
+    }
+
+    const homeFooter = smartHome
+      ? `<div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 11px; color: var(--text-3); font-family: 'JetBrains Mono', monospace; text-align: center; letter-spacing: 0.06em;">+ 6 home devices ready to follow</div>`
+      : '';
+
+    tryEls.tryContent.innerHTML = `
+      <div class="nudge visible" style="opacity:1; transform:none;">
+        <div class="nudge-head">
+          <div class="nudge-icon">小</div>
+          <div class="nudge-app">Commute Co-Pilot</div>
+          <div class="nudge-time">${nowLabel}</div>
+        </div>
+        <div class="nudge-title">${nudge.title}</div>
+        <div class="nudge-body">${nudge.body}</div>
+        <div class="nudge-actions">
+          <button class="nudge-btn primary">Start navigation</button>
+          <button class="nudge-btn secondary">Not today</button>
+        </div>
+        ${homeFooter}
+      </div>
+    `;
+  }
+
+  function generate() {
+    const eventText = tryEls.eventInput.value.trim();
+    if (!eventText) {
+      renderError('Add a calendar event first — like <em>"9am standup at Building 4"</em>.');
+      return;
+    }
+
+    const eventTime = parseEventTime(eventText);
+    if (!eventTime) {
+      renderError('Could not find a time in that event. Try something like <em>"9am"</em>, <em>"1:30pm"</em>, or <em>"13:00"</em>.');
+      return;
+    }
+
+    let destination = tryEls.destInput.value.trim();
+    if (!destination) {
+      // Try to extract from event text
+      const atMatch = eventText.match(/\s+at\s+(.+)$/i);
+      const inMatch = eventText.match(/\s+in\s+(.+)$/i);
+      destination = atMatch ? atMatch[1].trim() : (inMatch ? inMatch[1].trim() : 'your destination');
+    }
+
+    const currentTime = getCurrentTime(tryEls.currentInput.value);
+    if (!currentTime) {
+      renderError('Could not parse the current time. Use <em>"now"</em> or a time like <em>"7:45am"</em>.');
+      return;
+    }
+
+    if (diffMinutes(eventTime, currentTime) < 0) {
+      renderError('Your event is earlier than the current time. Set a future event time.');
+      return;
+    }
+
+    const heavyTraffic = tryEls.trafficToggle.checked;
+    const driveMin = estimateDrive(destination, heavyTraffic);
+    const nudge = buildNudge(eventText, destination, eventTime, currentTime, driveMin, heavyTraffic);
+
+    if (nudge.minutesUntilDeparture < -5) {
+      renderError(`That event starts in ${diffMinutes(eventTime, currentTime)} min, but the drive is ${driveMin} min. You'd already be late.`);
+      return;
+    }
+
+    renderNudge(nudge, eventTime, tryEls.smartHomeToggle.checked);
+  }
+
+  tryEls.generateBtn.addEventListener('click', generate);
+  // Generate on Enter in event input
+  tryEls.eventInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey || !e.shiftKey)) {
+      e.preventDefault();
+      generate();
+    }
+  });
+</script>
+
+</body>
+</html>
