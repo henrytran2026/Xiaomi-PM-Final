@@ -1074,6 +1074,18 @@
     transition: left 0.2s;
   }
 
+  /* ===== CHAR COUNTER ===== */
+  .char-counter {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-3);
+    text-align: right;
+    margin-top: 3px;
+    transition: color 0.2s;
+  }
+  .char-counter.warn { color: var(--warn); }
+  .char-counter.over { color: #f87171; }
+
   @media (max-width: 1100px) {
     .try-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
   }
@@ -1340,16 +1352,31 @@
     <div class="try-controls">
       <div class="try-card">
         <label class="try-label">Event name</label>
-        <input type="text" id="tryTitle" value="Team Standup" placeholder="e.g. Lunch with Sarah" class="try-input">
+        <input type="text" id="tryTitle" value="Team Standup" placeholder="e.g. Lunch with Sarah" class="try-input" maxlength="120">
+        <div class="char-counter" id="titleCounter">12 / 60</div>
 
         <label class="try-label" style="margin-top:14px;">Time</label>
         <div style="display:flex; gap:8px;">
           <select id="tryHour" class="try-select">
-            <option value="7">7 AM</option><option value="8">8 AM</option><option value="9" selected>9 AM</option>
-            <option value="10">10 AM</option><option value="11">11 AM</option><option value="12">12 PM</option>
-            <option value="13">1 PM</option><option value="14">2 PM</option><option value="15">3 PM</option>
-            <option value="16">4 PM</option><option value="17">5 PM</option><option value="18">6 PM</option>
-            <option value="19">7 PM</option><option value="20">8 PM</option>
+            <option value="5">5 AM</option>
+            <option value="6">6 AM</option>
+            <option value="7">7 AM</option>
+            <option value="8">8 AM</option>
+            <option value="9" selected>9 AM</option>
+            <option value="10">10 AM</option>
+            <option value="11">11 AM</option>
+            <option value="12">12 PM</option>
+            <option value="13">1 PM</option>
+            <option value="14">2 PM</option>
+            <option value="15">3 PM</option>
+            <option value="16">4 PM</option>
+            <option value="17">5 PM</option>
+            <option value="18">6 PM</option>
+            <option value="19">7 PM</option>
+            <option value="20">8 PM</option>
+            <option value="21">9 PM</option>
+            <option value="22">10 PM</option>
+            <option value="23">11 PM</option>
           </select>
           <select id="tryMin" class="try-select">
             <option value="0">:00</option><option value="15">:15</option><option value="30">:30</option><option value="45">:45</option>
@@ -1641,12 +1668,58 @@
   let trySearchTimer = null;
 
   const tryDevices = [
-    { id:'lock', name:'Front Door', action:'Lock', icon:'\u2302', on:true },
-    { id:'lights', name:'All Lights', action:'Turn off', icon:'\u2726', on:true },
-    { id:'ac', name:'AC', action:'Set to away (28\u00B0C)', icon:'\u224B', on:true },
-    { id:'camera', name:'Cameras', action:'Arm', icon:'\u25A2', on:true },
-    { id:'vacuum', name:'Robot Vacuum', action:'Start cleaning', icon:'\u25CB', on:false },
+    { id:'lock', name:'Front Door', action:'Lock', icon:'⌂', on:true },
+    { id:'lights', name:'All Lights', action:'Turn off', icon:'✦', on:true },
+    { id:'ac', name:'AC', action:'Set to away (28°C)', icon:'≋', on:true },
+    { id:'camera', name:'Cameras', action:'Arm', icon:'▢', on:true },
+    { id:'vacuum', name:'Robot Vacuum', action:'Start cleaning', icon:'○', on:false },
   ];
+
+  // ── FIX P0: HTML escaping ──────────────────────────────────────────────────
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = String(str);
+    return div.innerHTML;
+  }
+
+  // ── FIX P1: Sensitive title filter ────────────────────────────────────────
+  var SENSITIVE_KEYWORDS = [
+    'divorce','lawyer','attorney','litigation','custody','alimony',
+    'hiv','std','sti','herpes','hepatitis','cancer','oncology','tumor','biopsy',
+    'therapy','therapist','psychiatrist','psychologist','counseling','rehab',
+    'rehabilitation','addiction','detox','aa meeting','alcoholics','anonymous',
+    'abortion','miscarriage','fertility','ivf',
+    'bankruptcy','foreclosure','debt','collections','dui','probation','parole',
+    'funeral','hospice','palliative',
+    'test results','medical results','lab results',
+  ];
+
+  function sensitizeTitle(title) {
+    var lower = title.toLowerCase();
+    for (var i = 0; i < SENSITIVE_KEYWORDS.length; i++) {
+      if (lower.indexOf(SENSITIVE_KEYWORDS[i]) !== -1) return 'Appointment';
+    }
+    return title;
+  }
+
+  // ── FIX P1/E02: Title truncation ──────────────────────────────────────────
+  var DISPLAY_MAX = 60;
+  function truncate(str, max) {
+    if (!str) return '';
+    str = str.replace(/[\r\n\t]+/g, ' ').trim(); // collapse whitespace/newlines
+    return str.length > max ? str.slice(0, max - 3) + '...' : str;
+  }
+
+  // ── Char counter for title input ──────────────────────────────────────────
+  var titleInput = document.getElementById('tryTitle');
+  var titleCounter = document.getElementById('titleCounter');
+  function updateCounter() {
+    var len = titleInput.value.length;
+    titleCounter.textContent = len + ' / ' + DISPLAY_MAX;
+    titleCounter.className = 'char-counter' + (len > DISPLAY_MAX ? ' over' : len > 45 ? ' warn' : '');
+  }
+  titleInput.addEventListener('input', updateCounter);
+  updateCounter();
 
   // Phone screen management
   function showTryScreen(name) {
@@ -1654,7 +1727,8 @@
       var el = document.getElementById(id);
       el.style.display = 'none';
     });
-    var target = document.getElementById('tryScreen' + name.charAt(0).toUpperCase() + name.slice(1));
+    var key = name.charAt(0).toUpperCase() + name.slice(1);
+    var target = document.getElementById('tryScreen' + key);
     target.style.display = 'flex';
   }
 
@@ -1692,12 +1766,20 @@
         (d.features || []).forEach(function(f) {
           var item = document.createElement('div');
           item.className = 'try-result-item';
-          item.innerHTML = '<div style="font-weight:500;">' + f.text + '</div><div class="try-result-sub">' + f.place_name + '</div>';
+          // Use textContent for geocoder results to avoid XSS from external data
+          var nameEl = document.createElement('div');
+          nameEl.style.fontWeight = '500';
+          nameEl.textContent = f.text;
+          var subEl = document.createElement('div');
+          subEl.className = 'try-result-sub';
+          subEl.textContent = f.place_name;
+          item.appendChild(nameEl);
+          item.appendChild(subEl);
           item.addEventListener('click', function() {
             tryDestInput.value = f.text;
             tryDestCoords = { lng: f.center[0], lat: f.center[1] };
             tryDestName = f.text;
-            tryDestConfirm.textContent = '\u2713 ' + f.place_name;
+            tryDestConfirm.textContent = '✓ ' + f.place_name;
             tryDestResults.classList.remove('open');
           });
           tryDestResults.appendChild(item);
@@ -1715,6 +1797,7 @@
   document.querySelectorAll('.try-chip').forEach(function(chip) {
     chip.addEventListener('click', async function() {
       document.getElementById('tryTitle').value = chip.dataset.title;
+      updateCounter();
       document.getElementById('tryHour').value = chip.dataset.hour;
       document.getElementById('tryMin').value = chip.dataset.min;
       tryDestInput.value = chip.dataset.dest.split(',')[0];
@@ -1726,7 +1809,7 @@
         if (d.features && d.features[0]) {
           tryDestCoords = { lng: d.features[0].center[0], lat: d.features[0].center[1] };
           tryDestName = d.features[0].text;
-          tryDestConfirm.textContent = '\u2713 ' + d.features[0].place_name;
+          tryDestConfirm.textContent = '✓ ' + d.features[0].place_name;
         }
       } catch(e) { tryDestConfirm.textContent = 'Could not find location'; }
     });
@@ -1738,12 +1821,18 @@
   // Generate nudge
   document.getElementById('tryGenerate').addEventListener('click', async function() {
     var btn = this;
-    var title = document.getElementById('tryTitle').value.trim();
+    var rawTitle = document.getElementById('tryTitle').value.trim();
     var hour = parseInt(document.getElementById('tryHour').value);
     var min = parseInt(document.getElementById('tryMin').value);
-    if (!title) { alert('Enter an event name'); return; }
+
+    // ── E01: Empty event name ──────────────────────────────────────────────
+    if (!rawTitle) { alert('Enter an event name'); return; }
     if (!tryDestCoords) { alert('Search and select a destination'); return; }
     if (!tryUserLoc) { alert('Still getting your location. Try again in a moment.'); return; }
+
+    // ── P1: Sanitize + P1/E02: Truncate, then P0: Escape ─────────────────
+    var displayTitle = escapeHtml(truncate(sensitizeTitle(rawTitle), DISPLAY_MAX));
+    var safeDestName = escapeHtml(truncate(tryDestName, 40));
 
     btn.disabled = true; btn.textContent = 'Checking traffic...';
 
@@ -1756,14 +1845,38 @@
       var distKm = (d.routes[0].distance / 1000).toFixed(1);
       tryDirections = { duration: durationMin, distance: distKm, geometry: d.routes[0].geometry };
 
+      // ── P2: Suppress nudge for very short drives (E05, E10) ──────────────
+      if (durationMin < 5) {
+        var nearbyEl = document.getElementById('tryScreenNudge');
+        nearbyEl.innerHTML = '';
+        var nearbyDiv = document.createElement('div');
+        nearbyDiv.style.cssText = 'flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; color:var(--text-2); font-size:13px; padding:20px;';
+        var nearbyIcon = document.createElement('div');
+        nearbyIcon.style.cssText = 'font-size:32px; margin-bottom:12px;';
+        nearbyIcon.textContent = '🏠';
+        var nearbyMsg = document.createElement('div');
+        nearbyMsg.innerHTML = '<strong>' + displayTitle + '</strong> is only ' + durationMin + ' min' + (durationMin === 0 ? ' (you\'re already there!)' : ' away') + ' — no nudge needed.';
+        nearbyDiv.appendChild(nearbyIcon);
+        nearbyDiv.appendChild(nearbyMsg);
+        nearbyEl.appendChild(nearbyDiv);
+        showTryScreen('nudge');
+        btn.disabled = false; btn.textContent = 'Generate the nudge';
+        return;
+      }
+
       var trafficLevel = durationMin > 45 ? 'heavy' : durationMin > 25 ? 'moderate' : 'light';
       var trafficColor = trafficLevel === 'heavy' ? '#f87171' : trafficLevel === 'moderate' ? '#fbbf24' : '#34d399';
       var trafficBg = trafficLevel === 'heavy' ? 'rgba(248,113,113,0.12)' : trafficLevel === 'moderate' ? 'rgba(251,191,36,0.12)' : 'rgba(52,211,153,0.12)';
 
       var eventMins = hour * 60 + min;
       var departureMins = eventMins - durationMin - 15;
-      var depH = Math.floor(departureMins / 60); var depM = departureMins % 60;
-      if (depH < 0) depH += 24;
+
+      // ── P2: Fix negative minute bug (E07) ─────────────────────────────────
+      var depH = Math.floor(departureMins / 60);
+      var depM = departureMins % 60;
+      if (depM < 0) { depM += 60; }   // JS % preserves sign; normalise to 0–59
+      if (depH < 0) { depH = ((depH % 24) + 24) % 24; }
+
       var departureStr = fmtTime(depH, depM);
       var eventStr = fmtTime(hour, min);
 
@@ -1773,38 +1886,81 @@
       var tom = new Date(); tom.setDate(tom.getDate() + 1);
       var tomStr = tom.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
 
-      // Render nudge screen
+      // ── Build nudge via DOM (never innerHTML with user data) ──────────────
       var nudgeEl = document.getElementById('tryScreenNudge');
-      nudgeEl.innerHTML = '' +
-        '<div style="text-align:center; margin:8px 0 6px;">' +
-          '<div style="font-family:Fraunces,serif; font-weight:300; font-size:38px; letter-spacing:-0.03em;">' + departureStr.split(' ')[0] + '</div>' +
-          '<div style="font-size:10px; color:var(--text-3); text-transform:uppercase; letter-spacing:0.12em; margin-top:2px;">' + tomStr + '</div>' +
-        '</div>' +
-        '<div style="flex:1;"></div>' +
-        '<div style="background:rgba(28,31,39,0.95); border:1px solid var(--line-strong); border-radius:14px; padding:12px 10px 10px;">' +
-          '<div style="display:flex; align-items:center; gap:6px; margin-bottom:6px;">' +
-            '<div style="width:18px; height:18px; border-radius:5px; background:var(--orange); display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:#fff; font-family:Fraunces,serif;">\u5C0F</div>' +
-            '<div style="font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-2);">Commute Co-Pilot</div>' +
-            '<div style="margin-left:auto; font-size:8px; color:var(--text-3); font-family:JetBrains Mono,monospace;">now</div>' +
-          '</div>' +
-          '<div style="font-size:12px; font-weight:600; margin-bottom:3px; line-height:1.35;">Leave by ' + departureStr + ' for your ' + eventStr + ' ' + title + '.</div>' +
-          '<div style="font-size:11px; color:var(--text-2); line-height:1.4; margin-bottom:10px;">' + phrase + ' ' + minsToText(durationMin) + ' drive to ' + tryDestName + '.</div>' +
-          '<div style="display:flex; gap:4px; flex-wrap:wrap; margin-bottom:10px;">' +
-            '<span style="background:' + trafficBg + '; color:' + trafficColor + '; padding:3px 8px; border-radius:99px; font-size:10px; font-weight:600;">' + minsToText(durationMin) + '</span>' +
-            '<span style="background:' + trafficBg + '; color:' + trafficColor + '; padding:3px 8px; border-radius:99px; font-size:10px; font-weight:600; text-transform:capitalize;">' + trafficLevel + '</span>' +
-            '<span style="background:rgba(96,165,250,0.12); color:#60a5fa; padding:3px 8px; border-radius:99px; font-size:10px; font-weight:600;">' + distKm + ' km</span>' +
-          '</div>' +
-          '<div style="display:flex; gap:5px;">' +
-            '<button id="tryStartNav" style="flex:1; padding:8px; border-radius:10px; border:none; background:var(--orange); color:#fff; font-size:10px; font-weight:600; cursor:pointer; font-family:Inter,sans-serif;">Start navigation</button>' +
-            '<button style="padding:8px 12px; border-radius:10px; border:1px solid var(--line-strong); background:transparent; color:var(--text-2); font-size:10px; cursor:pointer; font-family:Inter,sans-serif;">Not today</button>' +
-          '</div>' +
-        '</div>';
+      nudgeEl.innerHTML = '';
+
+      // Clock block
+      var clockDiv = document.createElement('div');
+      clockDiv.style.cssText = 'text-align:center; margin:8px 0 6px;';
+      var clockTime = document.createElement('div');
+      clockTime.style.cssText = "font-family:'Fraunces',serif; font-weight:300; font-size:38px; letter-spacing:-0.03em;";
+      clockTime.textContent = departureStr.split(' ')[0];
+      var clockDate = document.createElement('div');
+      clockDate.style.cssText = 'font-size:10px; color:var(--text-3); text-transform:uppercase; letter-spacing:0.12em; margin-top:2px;';
+      clockDate.textContent = tomStr;
+      clockDiv.appendChild(clockTime);
+      clockDiv.appendChild(clockDate);
+      nudgeEl.appendChild(clockDiv);
+
+      var spacer = document.createElement('div');
+      spacer.style.flex = '1';
+      nudgeEl.appendChild(spacer);
+
+      // Card
+      var card = document.createElement('div');
+      card.style.cssText = 'background:rgba(28,31,39,0.95); border:1px solid var(--line-strong); border-radius:14px; padding:12px 10px 10px;';
+
+      // Header row
+      var headRow = document.createElement('div');
+      headRow.style.cssText = 'display:flex; align-items:center; gap:6px; margin-bottom:6px;';
+      headRow.innerHTML =
+        '<div style="width:18px;height:18px;border-radius:5px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;font-family:Fraunces,serif;">小</div>' +
+        '<div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-2);">Commute Co-Pilot</div>' +
+        '<div style="margin-left:auto;font-size:8px;color:var(--text-3);font-family:JetBrains Mono,monospace;">now</div>';
+      card.appendChild(headRow);
+
+      // Title
+      var titleEl = document.createElement('div');
+      titleEl.style.cssText = 'font-size:12px; font-weight:600; margin-bottom:3px; line-height:1.35;';
+      titleEl.textContent = 'Leave by ' + departureStr + ' for your ' + eventStr + ' ' + sensitizeTitle(rawTitle).slice(0, DISPLAY_MAX);
+      card.appendChild(titleEl);
+
+      // Body
+      var bodyEl = document.createElement('div');
+      bodyEl.style.cssText = 'font-size:11px; color:var(--text-2); line-height:1.4; margin-bottom:10px;';
+      bodyEl.textContent = phrase + ' ' + minsToText(durationMin) + ' drive to ' + tryDestName.slice(0, 40) + '.';
+      card.appendChild(bodyEl);
+
+      // Badges
+      var badgeRow = document.createElement('div');
+      badgeRow.style.cssText = 'display:flex; gap:4px; flex-wrap:wrap; margin-bottom:10px;';
+      badgeRow.innerHTML =
+        '<span style="background:' + trafficBg + ';color:' + trafficColor + ';padding:3px 8px;border-radius:99px;font-size:10px;font-weight:600;">' + escapeHtml(minsToText(durationMin)) + '</span>' +
+        '<span style="background:' + trafficBg + ';color:' + trafficColor + ';padding:3px 8px;border-radius:99px;font-size:10px;font-weight:600;text-transform:capitalize;">' + escapeHtml(trafficLevel) + '</span>' +
+        '<span style="background:rgba(96,165,250,0.12);color:#60a5fa;padding:3px 8px;border-radius:99px;font-size:10px;font-weight:600;">' + escapeHtml(distKm) + ' km</span>';
+      card.appendChild(badgeRow);
+
+      // Buttons
+      var btnRow = document.createElement('div');
+      btnRow.style.cssText = 'display:flex; gap:5px;';
+      var startBtn = document.createElement('button');
+      startBtn.id = 'tryStartNav';
+      startBtn.style.cssText = 'flex:1;padding:8px;border-radius:10px;border:none;background:var(--orange);color:#fff;font-size:10px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;';
+      startBtn.textContent = 'Start navigation';
+      var dismissBtn = document.createElement('button');
+      dismissBtn.style.cssText = 'padding:8px 12px;border-radius:10px;border:1px solid var(--line-strong);background:transparent;color:var(--text-2);font-size:10px;cursor:pointer;font-family:Inter,sans-serif;';
+      dismissBtn.textContent = 'Not today';
+      btnRow.appendChild(startBtn);
+      btnRow.appendChild(dismissBtn);
+      card.appendChild(btnRow);
+      nudgeEl.appendChild(card);
 
       document.getElementById('tryPhoneTime').textContent = departureStr.split(' ')[0];
       showTryScreen('nudge');
 
       // Wire Start Nav -> devices screen
-      document.getElementById('tryStartNav').addEventListener('click', function() {
+      startBtn.addEventListener('click', function() {
         renderTryDevicesInPhone();
         showTryScreen('devices');
       });
@@ -1821,21 +1977,45 @@
       var row = document.createElement('div');
       row.className = 'try-device-row';
       row.dataset.id = d.id;
-      row.innerHTML = '' +
-        '<span style="font-size:14px; width:24px; text-align:center; color:var(--text-2);">' + d.icon + '</span>' +
-        '<div style="flex:1;">' +
-          '<div style="font-size:12px; font-weight:500;">' + d.name + '</div>' +
-          '<div style="font-size:10px; color:var(--text-3);">' + d.action + '</div>' +
-        '</div>' +
-        '<div class="try-device-status" style="font-size:10px; color:var(--green); font-weight:600; display:none; white-space:nowrap;">Done \u2713</div>' +
-        '<div class="try-device-toggle" data-id="' + d.id + '" style="background:' + (d.on ? 'var(--orange)' : 'var(--surface-3)') + ';">' +
-          '<div class="knob" style="left:' + (d.on ? '20px' : '2px') + ';"></div>' +
-        '</div>';
-      row.querySelector('.try-device-toggle').addEventListener('click', function() {
+
+      var iconEl = document.createElement('span');
+      iconEl.style.cssText = 'font-size:14px; width:24px; text-align:center; color:var(--text-2);';
+      iconEl.textContent = d.icon;
+
+      var textDiv = document.createElement('div');
+      textDiv.style.flex = '1';
+      var nameEl = document.createElement('div');
+      nameEl.style.cssText = 'font-size:12px; font-weight:500;';
+      nameEl.textContent = d.name;
+      var actionEl = document.createElement('div');
+      actionEl.style.cssText = 'font-size:10px; color:var(--text-3);';
+      actionEl.textContent = d.action;
+      textDiv.appendChild(nameEl);
+      textDiv.appendChild(actionEl);
+
+      var statusEl = document.createElement('div');
+      statusEl.className = 'try-device-status';
+      statusEl.style.cssText = 'font-size:10px; color:var(--green); font-weight:600; display:none; white-space:nowrap;';
+      statusEl.textContent = 'Done ✓';
+
+      var toggle = document.createElement('div');
+      toggle.className = 'try-device-toggle';
+      toggle.dataset.id = d.id;
+      toggle.style.background = d.on ? 'var(--orange)' : 'var(--surface-3)';
+      var knob = document.createElement('div');
+      knob.className = 'knob';
+      knob.style.left = d.on ? '20px' : '2px';
+      toggle.appendChild(knob);
+      toggle.addEventListener('click', function() {
         d.on = !d.on;
-        this.style.background = d.on ? 'var(--orange)' : 'var(--surface-3)';
-        this.querySelector('.knob').style.left = d.on ? '20px' : '2px';
+        toggle.style.background = d.on ? 'var(--orange)' : 'var(--surface-3)';
+        knob.style.left = d.on ? '20px' : '2px';
       });
+
+      row.appendChild(iconEl);
+      row.appendChild(textDiv);
+      row.appendChild(statusEl);
+      row.appendChild(toggle);
       list.appendChild(row);
     });
   }
@@ -1907,29 +2087,66 @@
       tryMapInstance.fitBounds(bounds, { padding: 30, maxZoom: 13 });
     });
 
-    // Route info
-    document.getElementById('tryRouteInfoInPhone').innerHTML = '' +
-      '<div style="background:var(--surface-1); border:1px solid var(--line); border-radius:10px; padding:10px;">' +
-        '<div style="font-size:14px; font-weight:700;">' + minsToText(tryDirections.duration) + '</div>' +
-        '<div style="font-size:10px; color:var(--text-2); margin-bottom:6px;">' + tryDirections.distance + ' km to ' + tryDestName + '</div>' +
-        '<div style="background:var(--surface-2); border-radius:6px; padding:6px 8px; font-size:11px;">' +
-          '<span style="color:var(--orange);">\u25CF</span> ' + tryUserLocName.split(',')[0].trim() +
-          ' <span style="color:var(--text-3);">\u2192</span> ' +
-          '<span style="color:var(--green);">\u25CF</span> ' + tryDestName +
-        '</div>' +
-      '</div>';
+    // Route info — use textContent throughout
+    var routeCard = document.createElement('div');
+    routeCard.style.cssText = 'background:var(--surface-1); border:1px solid var(--line); border-radius:10px; padding:10px; margin-top:8px;';
+
+    var durationEl = document.createElement('div');
+    durationEl.style.cssText = 'font-size:14px; font-weight:700;';
+    durationEl.textContent = minsToText(tryDirections.duration);
+
+    var distEl = document.createElement('div');
+    distEl.style.cssText = 'font-size:10px; color:var(--text-2); margin-bottom:6px;';
+    distEl.textContent = tryDirections.distance + ' km to ' + tryDestName;
+
+    var routeRow = document.createElement('div');
+    routeRow.style.cssText = 'background:var(--surface-2); border-radius:6px; padding:6px 8px; font-size:11px;';
+    var originSpan = document.createElement('span');
+    originSpan.style.color = 'var(--orange)';
+    originSpan.textContent = '●';
+    var midSpan = document.createElement('span');
+    midSpan.style.color = 'var(--text-3)';
+    midSpan.textContent = ' ' + tryUserLocName.split(',')[0].trim() + ' → ';
+    var destSpan = document.createElement('span');
+    destSpan.style.color = 'var(--green)';
+    destSpan.textContent = '●';
+    var destText = document.createTextNode(' ' + tryDestName);
+    routeRow.appendChild(originSpan);
+    routeRow.appendChild(midSpan);
+    routeRow.appendChild(destSpan);
+    routeRow.appendChild(destText);
+
+    routeCard.appendChild(durationEl);
+    routeCard.appendChild(distEl);
+    routeCard.appendChild(routeRow);
+    document.getElementById('tryRouteInfoInPhone').innerHTML = '';
+    document.getElementById('tryRouteInfoInPhone').appendChild(routeCard);
 
     // Device done summary
     var enabled = tryDevices.filter(function(d) { return d.on; });
-    var html = '<div style="background:var(--surface-1); border:1px solid var(--line); border-radius:10px; padding:10px;">' +
-      '<div style="font-size:12px; font-weight:600; margin-bottom:6px;">Departure routine complete</div>';
+    var doneCard = document.createElement('div');
+    doneCard.style.cssText = 'background:var(--surface-1); border:1px solid var(--line); border-radius:10px; padding:10px; margin-top:8px;';
+    var doneTitle = document.createElement('div');
+    doneTitle.style.cssText = 'font-size:12px; font-weight:600; margin-bottom:6px;';
+    doneTitle.textContent = 'Departure routine complete';
+    doneCard.appendChild(doneTitle);
     enabled.forEach(function(d) {
-      html += '<div style="display:flex; align-items:center; gap:6px; padding:3px 0; font-size:11px; color:var(--text-2);">' +
-        '<span>' + d.icon + '</span><span>' + d.name + ': ' + d.action + '</span>' +
-        '<span style="margin-left:auto; color:var(--green);">\u2713</span></div>';
+      var devRow = document.createElement('div');
+      devRow.style.cssText = 'display:flex; align-items:center; gap:6px; padding:3px 0; font-size:11px; color:var(--text-2);';
+      var devIcon = document.createElement('span');
+      devIcon.textContent = d.icon;
+      var devName = document.createElement('span');
+      devName.textContent = d.name + ': ' + d.action;
+      var devCheck = document.createElement('span');
+      devCheck.style.cssText = 'margin-left:auto; color:var(--green);';
+      devCheck.textContent = '✓';
+      devRow.appendChild(devIcon);
+      devRow.appendChild(devName);
+      devRow.appendChild(devCheck);
+      doneCard.appendChild(devRow);
     });
-    html += '</div>';
-    document.getElementById('tryDeviceDoneInPhone').innerHTML = html;
+    document.getElementById('tryDeviceDoneInPhone').innerHTML = '';
+    document.getElementById('tryDeviceDoneInPhone').appendChild(doneCard);
   }
 </script>
 
