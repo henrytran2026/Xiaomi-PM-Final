@@ -1,281 +1,212 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a id="readme-top"></a>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
 
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![Unlicense License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
-
-<!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
+  <h1>🚗 Commute Co-Pilot</h1>
+  <p><strong>Your car knows when you should leave.</strong></p>
+  <p>An intelligent departure assistant for the Xiaomi SU7 that connects your calendar, real-time traffic, and smart home into one seamless morning flow.</p>
 
-  <h3 align="center">Best-README-Template</h3>
-
-  <p align="center">
-    An awesome README template to jumpstart your projects!
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-    &middot;
-    <a href="https://github.com/othneildrew/Best-README-Template/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
-    &middot;
-    <a href="https://github.com/othneildrew/Best-README-Template/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
-  </p>
+  <a href="https://henrytran2026.github.io/Xiaomi-PM-Final/">View Prototype</a>
+  &middot;
+  <a href="https://www.loom.com/share/d416d5076c934eec9a0ccc3c011d0907">Loom Walkthrough</a>
+  &middot;
+  <a href="#eval-results">Eval Results</a>
 </div>
 
+<br />
 
+<div align="center">
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
+![GitHub Pages](https://img.shields.io/badge/demo-live-brightgreen?style=flat-square&logo=github)
+![Tests](https://img.shields.io/badge/tests-173%20passed-brightgreen?style=flat-square)
+![Pass Rate](https://img.shields.io/badge/pass%20rate-100%25-brightgreen?style=flat-square)
+![HTML](https://img.shields.io/badge/built%20with-HTML%20%2F%20CSS%20%2F%20JS-orange?style=flat-square)
+![Mapbox](https://img.shields.io/badge/traffic%20data-Mapbox-blue?style=flat-square&logo=mapbox)
 
+</div>
 
+---
 
-<!-- ABOUT THE PROJECT -->
-## About The Project
+## About
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+Commute Co-Pilot is a proposed Xiaomi SU7 feature that learns your daily routine, syncs with your calendar, checks real-time traffic via Mapbox, and sends a smart departure nudge to your phone or watch. If you have Xiaomi smart home devices, it also triggers departure routines (lock door, lights off, AC to away mode) automatically.
 
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
+This repo contains the interactive prototype and supporting materials.
 
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people who have contributed to expanding this template!
-
-Use the `BLANK_README.md` to get started.
+**This is a concept prototype, not a production application.** It uses rule-based nudge generation and simulated smart home states. Read below for full prototype documentation, including the scripted walkthrough beats, interactive demo instructions, and tech notes.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-### Built With
-
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+Open the [prototype](https://henrytran2026.github.io/Xiaomi-PM-Final/) and follow these steps:
 
-### Prerequisites
+### Step 1: Watch the scripted walkthrough
+The top of the page shows three synchronized device frames (phone, SU7, Mi Home). Tap the **play button** to watch a morning departure unfold across six beats — from calendar sync to the car pulling away with the house locked behind you. You can also click any dot on the timeline to jump to a specific beat.
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+### Step 2: Try it yourself
+Scroll to the interactive section and build your own nudge:
 
-### Installation
+1. **Type an event name** — try something normal first, like "Team Standup"
+2. **Pick a time and search for a real destination** — the system pulls live traffic data from Mapbox
+3. **Tap "Co-Pilot, plan my drive"** — a nudge appears on the phone frame with your departure time, traffic level, and drive duration
+4. **Tap "Start navigation"** — watch the Mi Home dashboard animate device-by-device (lock → lights → AC → cameras)
+5. **Or tap "Not today"** — the nudge dismisses, simulating the learning signal
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+### Step 3: Test the safety features
+Use the quick presets below the input form to see how the prototype handles edge cases:
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/github_username/repo_name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-5. Change git remote url to avoid accidental pushes to base project
-   ```sh
-   git remote set-url origin github_username/repo_name
-   git remote -v # confirm the changes
-   ```
+| Preset | What to look for |
+|--------|-----------------|
+| ⚠️ Divorce lawyer | Title redacted to "Appointment" (sensitivity filter) |
+| 💉 HIV test | Medical privacy — same redaction |
+| 🔴 XSS Attack | `<script>` tag rendered as harmless text, not executed |
+| 📏 200-char title | Truncated to 60 characters with ellipsis |
+
+For the full walkthrough beat-by-beat breakdown and tech notes, see below.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## What to Look For
 
+These are the five interactions that best demonstrate the product thinking behind the prototype.
 
-<!-- USAGE EXAMPLES -->
-## Usage
+**1. The ecosystem loop — one tap, three systems.** Tap "Start navigation" after generating a nudge. Watch what happens: the route loads on the SU7 center screen, the Mi Home dashboard animates device-by-device (lock → lights → AC → cameras), and the phone confirms the handoff. That single tap replaces checking traffic, opening a maps app, locking the door, turning off lights, and adjusting the AC. This is the Xiaomi "Human × Car × Home" moat made tangible — and it's why no competitor with just a car or just a phone can replicate this experience.
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+**2. The "Not today" button as a learning signal.** Tap "Not today" instead of "Start navigation." The nudge dismisses cleanly with a confirmation. This isn't just a close button — it's a feedback mechanism. In production, every dismissal teaches the system about your schedule (WFH days, irregular weeks, days you don't drive). Our survey found 7/8 users said they'd tap "Not today" without annoyance if a nudge fired on the wrong day — validating this as the right design over a settings screen or manual schedule input.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+**3. The sensitivity filter — privacy by design.** Select the "⚠️ Divorce lawyer" or "💉 HIV test" preset. The nudge displays "Appointment" instead of the actual calendar title. Now toggle the 🔒 sensitivity filter off and regenerate — the real title appears. This demonstrates thinking beyond the functional job (get me there on time) to the emotional and social jobs (don't expose my private life on a lock screen that my passenger or coworker might see). The filter covers 43 keywords across medical, legal, recovery, and financial categories. Some keywords to try may include "Attorney, Custody, HIV, Cancer, Therapy, Fertility, Funeral".
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+**4. The XSS protection — security-tested, not just built.** Select the "🔴 XSS Attack" preset. The `<script>alert("XSS")</script>` tag renders as harmless text instead of executing. This means that any XSS vulnerabilities are eliminated by treating any questionable or otherwise tagged text as harmless and executing the nudge regardless.
 
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+**5. Input validation — what happens when things go wrong.** Try submitting an empty event name (blocked with an error), a 200-character title (truncated to 60 with ellipsis), or a drive time under 5 minutes (suppressed: "too short to nudge"). These aren't flashy, but they show that the prototype handles bad inputs gracefully instead of breaking — which is what separates a product that ships from one that demos.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Key Features
 
+**Sanitized Nudge Generation** — Three-step pipeline: `sensitizeTitle()` → `truncate(60)` → `escapeHtml()`. Renders via `textContent` (not `innerHTML`) to eliminate XSS. Blocks empty titles, suppresses drives under 5 minutes, fixes negative departure time wrapping, and collapses whitespace.
 
-<!-- CONTRIBUTING -->
-## Contributing
+**Animated Smart Home Departure Routine** — Tap "Start navigation" and the Mi Home dashboard animates a staggered device cascade (500ms per device): lock → lights → AC → cameras. Users toggle which devices are included.
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-### Top contributors:
-
-<a href="https://github.com/othneildrew/Best-README-Template/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=othneildrew/Best-README-Template" alt="contrib.rocks image" />
-</a>
+**Sensitive Content Filter** — 43 keywords across medical, legal, recovery, and financial categories. Sensitive calendar titles are redacted to "Appointment" in the nudge display. Benign titles pass through unmodified (verified with 10 false-positive checks).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Eval Results
 
+The prototype was evaluated against the golden dataset. Nudge generation logic was extracted from source code and tested programmatically.
 
-<!-- LICENSE -->
+| Category | Tests | Pass | Rate |
+|----------|-------|------|------|
+| Standard Commute | 62 | 62 | 100% |
+| Edge Cases | 40 | 40 | 100% |
+| Adversarial / Safety | 71 | 71 | 100% |
+| Tone / Personalization | — | — | N/A (requires LLM) |
+| **Total** | **173** | **173** | **100%** |
+
+**Coverage:** 87% of the 200-prompt golden dataset. The remaining 13% is Tone/Personalization, which requires an LLM-based nudge generator deferred to production (Internal FAQ 6).
+
+<details>
+<summary><strong>What was tested</strong></summary>
+
+**Standard (62 tests):** Every hour 5AM–11PM, all 15-min increments, midnight/noon/11:59PM boundaries, traffic thresholds at every boundary (25/26/45/46 min), 10 departure time calculations, 10 character types
+
+**Edge (40 tests):** 7 empty/whitespace variants, 11 length boundaries (1–10,000 chars), 10 drive suppression boundaries, 6 negative time wraps (1h–24h), 5 whitespace normalizations, unicode
+
+**Adversarial (71 tests):** 10 XSS vectors, 4 prompt injections, 3 code injections, all 43 sensitive keywords individually verified, 10 false positive checks on benign titles
+
+</details>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Architecture
+
+```
+User Input (event + time + destination)
+         │
+         ▼
+┌─────────────────────────────────────┐
+│      Sanitization Pipeline          │
+│  sensitize → truncate → escapeHtml  │
+└────────────────┬────────────────────┘
+         │
+    ┌────┴────┐
+    ▼         ▼
+ Validate   Mapbox API
+ (empty?    (distance,
+  <5 min?)   drive time)
+    │         │
+    └────┬────┘
+         ▼
+┌─────────────────────────────────────┐
+│        Nudge Generation             │
+│  departure = event − drive − 15min  │
+│  traffic: >45 heavy, >25 mod, ≤25  │
+│  render via textContent (XSS-safe)  │
+└────────────────┬────────────────────┘
+         │
+    ┌────┴────┐
+    ▼         ▼
+ Start Nav  Not Today
+    │        (dismiss +
+    ▼         learn)
+┌─────────────────────────────────────┐
+│   Smart Home Departure Routine      │
+│   500ms stagger per device          │
+│   Lock → Lights → AC → Cameras     │
+└─────────────────────────────────────┘
+```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Project Deliverables
+
+This prototype is part of a larger product strategy analysis for the Xiaomi SU7.
+
+| Deliverable | Description |
+|-------------|-------------|
+| Product Strategy Analysis | Competitive landscape, moat thesis, winning strategy (MGMT 276) |
+| PR-FAQ | Amazon-style press release and FAQ for Commute Co-Pilot (MGMT 275) |
+| Product Brief | `product_brief.md` — strategic context for an AI agent partner |
+| Prototype | This repo — interactive demo of the departure flow |
+| User Research | 8-respondent survey mapped to PR-FAQ claims |
+| Eval Report | 173-test golden dataset evaluation |
+| PM Framework | MD file defining how AI agents approach product work |
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## File Structure
+
+```
+Xiaomi-PM-Final/
+├── docs/
+│   ├── index.html        # The prototype (~2000 lines, single file)
+│   └── README.md         # This file (walkthrough, prototype link, tech notes)
+```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Known Limitations
+
+- **Rule-based, not LLM-powered.** Nudge phrasing uses templates. Production would use a fine-tuned LLM (Internal FAQ 6).
+- **Single-event input.** Multi-event support scoped for v2.
+- **No calendar sync.** Events entered manually.
+- **Simulated smart home.** No actual Xiaomi Mi Home API calls.
+- **Keyword substring matching.** Sensitivity filter uses `indexOf`. Production would use word-boundary regex or NLP.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## License
 
 Distributed under the Unlicense License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Henry Tran — UCLA Anderson, FEMBA 2026
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Chris Zikry — UCLA Anderson, FEMBA 2027
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
+Project Link: [github.com/henrytran2026/Xiaomi-PM-Final](https://github.com/henrytran2026/Xiaomi-PM-Final)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
-[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-[Angular-url]: https://angular.io/
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[Laravel-url]: https://laravel.com
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
