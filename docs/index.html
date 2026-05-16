@@ -1931,7 +1931,7 @@
       // Title
       var titleEl = document.createElement('div');
       titleEl.style.cssText = 'font-size:12px; font-weight:600; margin-bottom:3px; line-height:1.35;';
-      titleEl.textContent = 'Leave by ' + departureStr + ' for your ' + eventStr + ' ' + sensitizeTitle(rawTitle).slice(0, DISPLAY_MAX);
+      titleEl.textContent = 'Leave by ' + departureStr + ' for your ' + eventStr + ' ' + truncate(sensitizeTitle(rawTitle), DISPLAY_MAX);
       card.appendChild(titleEl);
 
       // Body
