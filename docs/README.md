@@ -75,7 +75,7 @@ These are the five interactions that best demonstrate the product thinking behin
 
 **2. The "Not today" button as a learning signal.** Tap "Not today" instead of "Start navigation." The nudge dismisses cleanly with a confirmation. This isn't just a close button — it's a feedback mechanism. In production, every dismissal teaches the system about your schedule (WFH days, irregular weeks, days you don't drive). Our survey found 7/8 users said they'd tap "Not today" without annoyance if a nudge fired on the wrong day — validating this as the right design over a settings screen or manual schedule input.
 
-**3. The sensitivity filter — privacy by design.** Select the "⚠️ Divorce lawyer" or "💉 HIV test" preset. The nudge displays "Appointment" instead of the actual calendar title. Now toggle the 🔒 sensitivity filter off and regenerate — the real title appears. This demonstrates thinking beyond the functional job (get me there on time) to the emotional and social jobs (don't expose my private life on a lock screen that my passenger or coworker might see). The filter covers 43 keywords across medical, legal, recovery, and financial categories.
+**3. The sensitivity filter — privacy by design.** Select the "⚠️ Divorce lawyer" or "💉 HIV test" preset. The nudge displays "Appointment" instead of the actual calendar title. Now toggle the 🔒 sensitivity filter off and regenerate — the real title appears. This demonstrates thinking beyond the functional job (get me there on time) to the emotional and social jobs (don't expose my private life on a lock screen that my passenger or coworker might see). The filter covers 43 keywords across medical, legal, recovery, and financial categories. Some keywords to try may include "Attorney, Custody, HIV, Cancer, Therapy, Fertility, Funeral".
 
 **4. The XSS protection — security-tested, not just built.** Select the "🔴 XSS Attack" preset. The `<script>alert("XSS")</script>` tag renders as harmless text instead of executing. This means that any XSS vulnerabilities are eliminated by treating any questionable or otherwise tagged text as harmless and executing the nudge regardless.
 
@@ -182,12 +182,7 @@ This prototype is part of a larger product strategy analysis for the Xiaomi SU7.
 Xiaomi-PM-Final/
 ├── docs/
 │   ├── index.html        # The prototype (~2000 lines, single file)
-│   └── README.md         # Prototype-specific docs (walkthrough, demo, tech notes)
-├── images/
-│   ├── logo.png
-│   └── screenshot.png
-├── LICENSE.txt
-└── README.md             # This file (project overview, eval, architecture)
+│   └── README.md         # This file (walkthrough, prototype link, tech notes)
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
