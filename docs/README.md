@@ -8,8 +8,6 @@
 
   <a href="https://henrytran2026.github.io/Xiaomi-PM-Final/">View Live Demo</a>
   &middot;
-  <a href="docs/README.md">Prototype Docs</a>
-  &middot;
   <a href="#eval-results">Eval Results</a>
 </div>
 
