@@ -197,10 +197,6 @@ Xiaomi-PM-Final/
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## License
-
-Distributed under the Unlicense License. See `LICENSE.txt` for more information.
-
 ## Contact
 
 Henry Tran — UCLA Anderson, FEMBA 2026
