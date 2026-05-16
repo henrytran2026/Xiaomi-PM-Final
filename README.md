@@ -160,33 +160,6 @@ User Input (event + time + destination)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Project Deliverables
-
-This prototype is part of a larger product strategy analysis for the Xiaomi SU7.
-
-| Deliverable | Description |
-|-------------|-------------|
-| Product Strategy Analysis | Competitive landscape, moat thesis, winning strategy (MGMT 276) |
-| PR-FAQ | Amazon-style press release and FAQ for Commute Co-Pilot (MGMT 275) |
-| Product Brief | `product_brief.md` — strategic context for an AI agent partner |
-| Prototype | This repo — interactive demo of the departure flow |
-| User Research | 8-respondent survey mapped to PR-FAQ claims |
-| Eval Report | 173-test golden dataset evaluation |
-| PM Framework | MD file defining how AI agents approach product work |
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## File Structure
-
-```
-Xiaomi-PM-Final/
-├── docs/
-│   ├── index.html        # The prototype (~2000 lines, single file)
-│   └── README.md         # This file (walkthrough, prototype link, tech notes)
-```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## Known Limitations
 
 - **Rule-based, not LLM-powered.** Nudge phrasing uses templates. Production would use a fine-tuned LLM (Internal FAQ 6).
