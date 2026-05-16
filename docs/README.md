@@ -29,7 +29,7 @@
 
 Commute Co-Pilot is a proposed Xiaomi SU7 feature that learns your daily routine, syncs with your calendar, checks real-time traffic via Mapbox, and sends a smart departure nudge to your phone or watch. If you have Xiaomi smart home devices, it also triggers departure routines (lock door, lights off, AC to away mode) automatically.
 
-This repo contains the interactive prototype and supporting materials for MGMT 275 (Product Management) and MGMT 276 (Product Strategy) at UCLA Anderson, FEMBA 2026.
+This repo contains the interactive prototype and supporting materials.
 
 **This is a concept prototype, not a production application.** It uses rule-based nudge generation and simulated smart home states. Read below for full prototype documentation, including the scripted walkthrough beats, interactive demo instructions, and tech notes.
 
