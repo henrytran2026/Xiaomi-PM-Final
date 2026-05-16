@@ -1930,9 +1930,34 @@
 
       // Title
       var titleEl = document.createElement('div');
-      titleEl.style.cssText = 'font-size:12px; font-weight:600; margin-bottom:3px; line-height:1.35;';
-      titleEl.textContent = 'Leave by ' + departureStr + ' for your ' + eventStr + ' ' + truncate(sensitizeTitle(rawTitle), DISPLAY_MAX);
+      titleEl.style.cssText = 'font-size:12px; font-weight:600; margin-bottom:3px; line-height:1.35; overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;';
+      var truncTitle = truncate(sensitizeTitle(rawTitle), DISPLAY_MAX);
+      titleEl.textContent = 'Leave by ' + departureStr + ' for your ' + eventStr + ' ' + truncTitle;
       card.appendChild(titleEl);
+
+      // Show truncation badge if title was cut
+      if (rawTitle.length > DISPLAY_MAX && sensitizeTitle(rawTitle) !== 'Appointment') {
+        var truncBadge = document.createElement('div');
+        truncBadge.style.cssText = 'font-size:9px; color:#fbbf24; background:rgba(251,191,36,0.1); padding:3px 8px; border-radius:6px; margin-bottom:6px; display:inline-block;';
+        truncBadge.textContent = '\u2702 Title truncated from ' + rawTitle.length + ' to ' + DISPLAY_MAX + ' chars';
+        card.appendChild(truncBadge);
+      }
+
+      // Show redaction badge if sensitive content was filtered
+      if (sensitizeTitle(rawTitle) === 'Appointment') {
+        var redactBadge = document.createElement('div');
+        redactBadge.style.cssText = 'font-size:9px; color:#fbbf24; background:rgba(251,191,36,0.1); padding:3px 8px; border-radius:6px; margin-bottom:6px; display:inline-block;';
+        redactBadge.textContent = '\uD83D\uDD12 Title redacted for privacy';
+        card.appendChild(redactBadge);
+      }
+
+      // Show XSS-safe badge if HTML tags detected in input
+      if (/<[^>]+>/.test(rawTitle)) {
+        var xssBadge = document.createElement('div');
+        xssBadge.style.cssText = 'font-size:9px; color:#34d399; background:rgba(52,211,153,0.1); padding:3px 8px; border-radius:6px; margin-bottom:6px; display:inline-block;';
+        xssBadge.textContent = '\uD83D\uDEE1 HTML tags neutralized \u2014 rendered as text, not executed';
+        card.appendChild(xssBadge);
+      }
 
       // Body
       var bodyEl = document.createElement('div');
