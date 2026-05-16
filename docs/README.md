@@ -6,7 +6,9 @@
   <p><strong>Your car knows when you should leave.</strong></p>
   <p>An intelligent departure assistant for the Xiaomi SU7 that connects your calendar, real-time traffic, and smart home into one seamless morning flow.</p>
 
-  <a href="https://henrytran2026.github.io/Xiaomi-PM-Final/">View Live Demo</a>
+  <a href="https://henrytran2026.github.io/Xiaomi-PM-Final/">View Prototype</a>
+  &middot;
+  <a href="https://www.loom.com/share/d416d5076c934eec9a0ccc3c011d0907">Loom Walkthrough</a>
   &middot;
   <a href="#eval-results">Eval Results</a>
 </div>
