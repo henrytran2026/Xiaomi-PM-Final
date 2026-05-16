@@ -33,7 +33,7 @@ Commute Co-Pilot is a proposed Xiaomi SU7 feature that learns your daily routine
 
 This repo contains the interactive prototype and supporting materials for MGMT 275 (Product Management) and MGMT 276 (Product Strategy) at UCLA Anderson, FEMBA 2026.
 
-**This is a concept prototype, not a production application.** It uses rule-based nudge generation and simulated smart home states. See [docs/README.md](docs/README.md) for full prototype documentation, including the scripted walkthrough beats, interactive demo instructions, and tech notes.
+**This is a concept prototype, not a production application.** It uses rule-based nudge generation and simulated smart home states. Read below for full prototype documentation, including the scripted walkthrough beats, interactive demo instructions, and tech notes.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -65,7 +65,7 @@ Use the quick presets below the input form to see how the prototype handles edge
 
 Toggle the **🔒 Sensitivity filter** checkbox to see redacted titles displayed verbatim when the filter is off.
 
-For the full walkthrough beat-by-beat breakdown and tech notes, see [docs/README.md](docs/README.md).
+For the full walkthrough beat-by-beat breakdown and tech notes, see below.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -211,6 +211,7 @@ Distributed under the Unlicense License. See `LICENSE.txt` for more information.
 ## Contact
 
 Henry Tran — UCLA Anderson, FEMBA 2026
+Chris Zikry — UCLA Anderson, FEMBA 2027
 
 Project Link: [github.com/henrytran2026/Xiaomi-PM-Final](https://github.com/henrytran2026/Xiaomi-PM-Final)
 
