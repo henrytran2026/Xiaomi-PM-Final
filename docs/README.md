@@ -61,8 +61,6 @@ Use the quick presets below the input form to see how the prototype handles edge
 | 🔴 XSS Attack | `<script>` tag rendered as harmless text, not executed |
 | 📏 200-char title | Truncated to 60 characters with ellipsis |
 
-Toggle the **🔒 Sensitivity filter** checkbox to see redacted titles displayed verbatim when the filter is off.
-
 For the full walkthrough beat-by-beat breakdown and tech notes, see below.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
