@@ -39,7 +39,7 @@ This repo contains the interactive prototype and supporting materials.
 
 ## Getting Started
 
-Open the [live demo](https://henrytran2026.github.io/Xiaomi-PM-Final/) and follow these steps:
+Open the [prototype](https://henrytran2026.github.io/Xiaomi-PM-Final/) and follow these steps:
 
 ### Step 1: Watch the scripted walkthrough
 The top of the page shows three synchronized device frames (phone, SU7, Mi Home). Tap the **play button** to watch a morning departure unfold across six beats — from calendar sync to the car pulling away with the house locked behind you. You can also click any dot on the timeline to jump to a specific beat.
@@ -95,7 +95,7 @@ These are the five interactions that best demonstrate the product thinking behin
 
 ## Eval Results
 
-The prototype was evaluated against the golden dataset defined in Internal FAQ 12 of the PR-FAQ. Nudge generation logic was extracted from source code and tested programmatically.
+The prototype was evaluated against the golden dataset. Nudge generation logic was extracted from source code and tested programmatically.
 
 | Category | Tests | Pass | Rate |
 |----------|-------|------|------|
@@ -209,6 +209,7 @@ Distributed under the Unlicense License. See `LICENSE.txt` for more information.
 ## Contact
 
 Henry Tran — UCLA Anderson, FEMBA 2026
+
 Chris Zikry — UCLA Anderson, FEMBA 2027
 
 Project Link: [github.com/henrytran2026/Xiaomi-PM-Final](https://github.com/henrytran2026/Xiaomi-PM-Final)
