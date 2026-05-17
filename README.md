@@ -160,16 +160,6 @@ User Input (event + time + destination)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Known Limitations
-
-- **Rule-based, not LLM-powered.** Nudge phrasing uses templates. Production would use a fine-tuned LLM (Internal FAQ 6).
-- **Single-event input.** Multi-event support scoped for v2.
-- **No calendar sync.** Events entered manually.
-- **Simulated smart home.** No actual Xiaomi Mi Home API calls.
-- **Keyword substring matching.** Sensitivity filter uses `indexOf`. Production would use word-boundary regex or NLP.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## Contact
 
 Henry Tran — UCLA Anderson, FEMBA 2026
